@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phanolink - Search</title>
+
+    <!-- Bootstrap 4 CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+             font-family: 'Product Sans', sans-serif;
+            background-color: #f8f9fa;
+            color: #202124;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1 {
+            color: #202124;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #1a73e8;
+            margin-top: 30px;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .list-group-item {
+            border: none;
+            background-color:auto;
+            margin-bottom: 10px;
+            
+        }
+
+        .list-group-item a {
+            color: #1a0dab;
+            text-decoration: none;
+        }
+
+        .list-group-item a:hover {
+            text-decoration: underline;
+        }
+
+        .list-group-item .fas {
+            margin-right: 10px;
+            color: #1a73e8;
+        }
+
+        .dark-mode {
+            background-color: #202124;
+            color: #e8eaed;
+        }
+
+        .dark-mode .list-group-item {
+            background-color: #303134;
+            color: #e8eaed;
+        }
+
+        .dark-mode h1,
+        .dark-mode h2
+        .darkmode nav-link {
+            color: #8ab4f8;
+        }
+
+        .dark-mode a {
+            color: #8ab4f8;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #ffffff;
+            transition: color 0.3s;
+            border-radius: 50%;
+            padding: 15px;
+            background: linear-gradient(135deg, #1a73e8, #0d47a1);
+        }
+
+        .theme-toggle:hover {
+            color: #f4b400;
+        }
+
+        
+/* Centering the navigation bar */
+.navbar-nav {
+    display: flex;
+    justify-content: center;
+    gap: 30px; /* Adds spacing between the nav items */
+}
+
+.navbar-nav .nav-link {
+    font-size: 1.2rem;
+    padding: 5px 10px;
+    position: relative;
+    color: auto;
+    text-align: center;
+}
+
+/* Animated underline effect */
+.navbar-nav .nav-link::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: #1a73e8;
+    bottom: -5px;
+    left: 0;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-out;
+}
+
+/* When the link is active or hovered */
+.navbar-nav .nav-link:hover::after,
+.navbar-nav .nav-link.active::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* Active link style */
+.navbar-nav .nav-link.active {
+    font-weight: bold;
+    color:auto;
+}
+
+    </style>
+</head>
+
+<body>
+<!-- Search Section -->
+<div class="container text-center mt-5">
+    <h1 class="mb-4">Phanolink</h1>
+    <form action="/search" method="POST" class="d-flex justify-content-center">
+        <div class="search-container">
+            <input 
+                type="text" 
+                id="searchInput" 
+                name="word" 
+                class="search-input" 
+                value="{{ word }}" 
+                placeholder="Enter a keyword" 
+                required>
+            <button 
+                type="submit" 
+                class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Add this CSS -->
+<style>
+    .search-container {
+        display: flex;
+        align-items: center;
+        border: 2px solid #1a73e8;
+        border-radius: 50px;
+        overflow: hidden;
+        max-width: 600px;
+        width: 100%;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 10px 15px;
+        border: none;
+        outline: none;
+        font-size: 16px;
+    }
+
+    .search-btn {
+        background: linear-gradient(to right, #1a73e8, #4285f4);
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height:100%;
+    }
+
+    .search-btn i {
+        font-size: 20px;
+    }
+
+    /* For Hover Effects */
+    .search-btn:hover {
+        background: linear-gradient(to right, #4285f4, #1a73e8);
+    }
+    .powered-section {
+      background-color:auto;
+      padding: 50px 20px;
+      text-align: center;
+      border-top: 2px solid #4285F4; /* Google Blue */
+    }
+    .powered-section h3 {
+      font-weight: 700;
+      color:linear-gradient(to right, #1a73e8, #4285f4);
+    }
+    .powered-section .google-icon {
+      color: #4285F4; /* Google Blue */
+      font-size: 50px;
+      margin-bottom: 10px;
+    }
+</style>
+
+
+<!-- Centered Navigation Section -->
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light justify-content-center">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#main" id="main-link" style = "color: #1a73e8;">Main</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#snippets" id="snippets-link" style = "color: #1a73e8;">Snippets</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#descriptions" id="descriptions-link" style = "color: #1a73e8;">Descriptions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#related-texts" id="related-texts-link" style = "color: #1a73e8;">Related Texts</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#related-links" id="related-links-link" style = "color: #1a73e8;">Related Links</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('about') }}" id="related-links-link" style = "color: #1a73e8;">About us</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<script>
+$(document).ready(function() {
+    // Set the default active class on the main link
+    $('#main-link').addClass('active');
+
+    // Function to detect scroll position and add active class
+    $(window).on('scroll', function() {
+        var scrollPosition = $(this).scrollTop();
+        
+        // Check each section's position
+        $('.section').each(function() {
+            var sectionOffset = $(this).offset().top - 50;
+            var sectionId = $(this).attr('id');
+            
+            if (scrollPosition >= sectionOffset) {
+                // Remove active class from all links
+                $('.nav-link').removeClass('active');
+                
+                // Add active class to the corresponding nav link
+                $('#'+sectionId+'-link').addClass('active');
+            }
+        });
+    });
+});
+
+</script>
+
+    <!-- Page Content -->
+    <div class="container mt-5" id="snippets">
+        <h2><i class="fas fa-lightbulb"></i> Snippets got for your search  :-) </h2>
+        <div class="powered-section">
+  <!-- Google Icon -->
+  <i class="fab fa-google google-icon"></i>
+  <!-- Powered by Google Text -->
+  <h3>Powered by Google</h3>
+</div>
+        <ul class="list-group">
+            {% for snippet in snippets %}
+            <li class="list-group-item">
+                <i class="fas fa-quote-left"></i> {{ snippet }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="container mt-5" id="descriptions">
+        <h2><i class="fas fa-info-circle"></i> Descriptions</h2>
+        <ul class="list-group">
+            {% for description in descriptions %}
+            <li class="list-group-item">
+                <i class="fas fa-file-alt"></i> {{ description }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="container mt-5" id="related-texts">
+        <h2><i class="fas fa-tags"></i> Related Overviews</h2>
+        <ul class="list-group">
+            {% for related_text in related_texts %}
+            <li class="list-group-item">
+                <i class="fas fa-link"></i> {{ related_text }}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="container mt-5" id="related-links">
+        <h2><i class="fas fa-external-link-alt"></i> Related Links</h2>
+        <ul class="list-group">
+            {% for link in links %}
+            <li class="list-group-item">
+                <a href="{{ link }}" target="_blank">
+                    <i class="fas fa-globe"></i> {{ link }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- jQuery & Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom Script for Dark/Light Mode -->
+    <script>
+        $(document).ready(function () {
+            // Initialize Theme
+            const body = $('body');
+            const themeToggle = $('#themeToggle');
+
+            function updateTheme() {
+                if (body.hasClass('dark-mode')) {
+                    themeToggle.removeClass('fa-moon').addClass('fa-sun');
+                    themeToggle.attr('title', 'Switch to Light Mode');
+                } else {
+                    themeToggle.removeClass('fa-sun').addClass('fa-moon');
+                    themeToggle.attr('title', 'Switch to Dark Mode');
+                }
+            }
+
+            // Toggle Theme on Click
+            themeToggle.click(function () {
+                body.toggleClass('dark-mode');
+                updateTheme();
+            });
+
+            // Initial Update
+            updateTheme();
+        });
+    </script>
+
+    <!-- Theme Toggle Icon -->
+    <i class="fas fa-moon theme-toggle" id="themeToggle" title="Toggle Dark/Light Mode"></i>
+
+</body>
+
+</html>
